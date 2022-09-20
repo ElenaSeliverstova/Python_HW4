@@ -1,34 +1,58 @@
-# 4- В текстовом файле удалить все слова, которые содержат хотя бы одну цифру.
-# В файле содержится, например:
-# Мама сшила м0не штаны и7з бере9зовой кор45ы 893. -> Мама сшила штаны.
+# Задана натуральная степень n.
+# Сформировать случайным образом список коэффициентов (значения от 0 до 100) многочлена и записать в файл многочлен степени n.
+# *Пример: n=2 => 2*x² + 4*x + 5 = 0 или x² + 5 = 0 или 10*x² = 0
 
-# https://zen.yandex.ru/suite/a6424a0f-4fdb-44a1-95a0-9945e6f0a699
-# Это на случай возникновения непонятных символов в файле.
+from hashlib import new
+from operator import truediv
+import random
+number_N = int(input('Input number: '))
+test_bool = True
+while test_bool:
+    list_1 = [random.randint(0, 100) for i in range(number_N+1)]
+    if list_1[0] != 0:
+        test_bool = False
 
+list_2 = ['x' for i in range(number_N+1)]
 
-file = open('Text.txt', "w", encoding='utf-8')
-file.write("Мама сшила м0не штаны и7з бере9зовой кор45ы 893.")
-file.close()
+result = ''
 
-path = 'Text.txt'
+for i in range(0, len(list_1)):
+    if list_1[i] == 1 and number_N>1:
+        result += f"{list_2[i]}^" + f"{number_N}"
+    elif list_1[i] != 0 and number_N>1:
+        result += f"{list_1[i]}*" + f"{list_2[i]}^" + f"{number_N}"
+    elif list_1[i] == 1 and number_N==1:
+        result += f"{list_2[i]}"
+    elif list_1[i] == 1 and number_N==0:
+        result += f"{list_1[i]}"
+    elif list_1[i] != 0 and number_N==1:
+        result += f"{list_1[i]}*" + f"{list_2[i]}"
+    elif list_1[i] != 0 and number_N==0:
+        result += f"{list_1[i]}"
+    if i < len(list_1)-1:
+        if result[-3:len(result)] != " + ":
+            result += " + "
+    number_N -= 1
+result += " = 0"
+print(result)
 
-def delete_nums(path: str) -> str:
+# с использованием zip
 
-    file = open('Text.txt' , "r",encoding='utf-8')
-    data = file.read()
-    list_of_words = data.split()
-    file.close()
+number_N = int(input('Input number: '))
+test_bool = True
+while test_bool:
+    coef_1 = list(map(str,[random.randint(0,100) for i in range(0,number_N+1)]))
+    if coef_1[0] !='0':
+        test_bool=False
 
-    new_list = []
-    for i in list_of_words:
-        delete_bool = False
-        for n in i:
-            if n.isdigit():
-                delete_bool = True
-                break
-        if delete_bool == False:
-            new_list.append(i)
+coef_2 = list(map(str,['x' if i < number_N else '' for i in range(0,number_N+1)]))
+coef_3 = list(map(str,[i if i>1 else '' for i in range(number_N,-1,-1)]))
 
-    return  f"{list_of_words} -> " + " ".join(new_list) 
-    
-print(delete_nums(path))
+new_list=list(zip(coef_1, coef_2, coef_3))
+
+for i,item in enumerate(new_list): # i - index, item - element value
+    new_list[i] = list(filter(lambda a: a!="", new_list[i]))
+    print(new_list[i])
+    new_list[i] = "*".join(list(map(str, item)))
+list_final=" + ".join(new_list)
+print(list_final)

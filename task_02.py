@@ -10,3 +10,20 @@ def quit(n):
             lst.append(i)
     return lst
 print(quit(num))
+
+my_list = input("Enter the sequence (separated by commas): \r\n").replace(' ','').split(',')
+
+result_list = []
+
+for i in my_list:
+    flag = False
+    for j in result_list:
+        if j == i:
+            flag = True
+            break
+    if flag:
+        continue
+    else:
+        result_list.append(i)
+
+print(result_list)
